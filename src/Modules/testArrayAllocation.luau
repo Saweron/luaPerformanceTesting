@@ -8,13 +8,13 @@ function M.testPreallocated(
 	running: () -> (),
 	finished: () -> ()
 ) : number
-	local array = table.create(PLACEHOLDER_VALUE, size)
+	local array = table.create(size, PLACEHOLDER_VALUE)
 
 	local generator = Random.new(seed)
 	for i = 1, size do array[i] = generator:NextNumber() end
 
 	running()
-	local sum = 0; for _, item in array do sum += item end
+	local sum = 0; for i = 1, size do sum += array[i] end
 	finished()
 
 	return sum
@@ -38,7 +38,7 @@ function M.testNonPreallocated(
 	end
 
 	running()
-	local sum = 0; for _, item in array do sum += item end
+	local sum = 0; for i = 1, size do sum += array[i] end
 	finished()
 
 	return sum
