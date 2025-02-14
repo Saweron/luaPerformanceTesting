@@ -1,5 +1,6 @@
 --!strict
 local M = {}
+local PLACEHOLDER_VALUE = 0
 
 function M.createAccessPattern(size: number, seed: number): {number}
 	local pattern = table.create(size, PLACEHOLDER_VALUE)
