@@ -1,0 +1,3 @@
+# Observations
+- Structure of arrays (SoA) is slower that array of structs (AoS) when iterating through a big list where all fields are accessed each step
+- A pre-allocated array and a sporadically created one seem to be stored the same way in memory. I'm guessing this means the array is dynamically resized and re-copied over to another place in memory instead of new indices spilling into the hash part of the array
