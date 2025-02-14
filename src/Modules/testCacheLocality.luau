@@ -19,13 +19,11 @@ function M.testSOA(
 	local function sumStruct(structId: number): number
 		if not isIdValid(structId, structuresAmount) then return NONE end
 
-		local sum = 0
-		for _, field in arrays do sum += field[structId] end
+		local sum = 0; for _, field in arrays do sum += field[structId] end
 		return sum
 	end
 	
-	local sum = 0
-	for id = 1, structuresAmount do sum += sumStruct(id) end
+	local sum = 0; for id = 1, structuresAmount do sum += sumStruct(id) end
 	return sum
 end
 
@@ -39,13 +37,11 @@ function M.testAOS(
  	local function sumStruct(structId: number) : number
 		if not isIdValid(structId, structuresAmount) then return NONE end
 
-		local sum = 0
-		for i = structId, fieldsAmount do sum += structs[i] end
+		local sum = 0; for i = structId, fieldsAmount do sum += structs[i] end
 		return sum
 	end
 
-	local sum = 0
-	for i = 1, structuresAmount, fieldsAmount do sum += sumStruct(i) end
+	local sum = 0; for i = 1, structuresAmount, fieldsAmount do sum += sumStruct(i) end
 	return sum
 end
 
