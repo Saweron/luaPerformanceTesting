@@ -9,24 +9,29 @@ local BAD_RESULT_MESSAGE =  "functions didn't produce same results"
 local USE_SEED = 1
 
 function M.runAll()
-	local done: () -> ()
+	local rundone: () -> ()? = nil
+	local function done() if rundone then rundone() end end
+
 	local function test(label: string)
 		local t0 = os.clock()
-		done = function() print(TESTING_PREFIX, label, (os.clock() - t0) * 1000, TIMER_SUFFIX) end
+		rundone = function() print(TESTING_PREFIX, label, (os.clock() - t0) * 1000, TIMER_SUFFIX) end
 	end
 
+	local function cb(call: (string) -> (), with): () -> () return function() call(with) end end
 
 	do
 		local FIELDS_AMOUNT = 100
 		local STRUCTURES_AMOUNT = 1000
 
-		test "struct of arrays"
-		local sum1 = testcache.testSOA(USE_SEED, FIELDS_AMOUNT, STRUCTURES_AMOUNT)
-		done()
+		local sum1 = testcache.testSOA(
+			USE_SEED, FIELDS_AMOUNT, STRUCTURES_AMOUNT,
+			cb(test, "struct of arrays"), done
+		)
 
-		test "array of structs"
-		local sum2 = testcache.testAOS(USE_SEED, FIELDS_AMOUNT, STRUCTURES_AMOUNT)
-		done()
+		local sum2 = testcache.testAOS(
+			USE_SEED, FIELDS_AMOUNT, STRUCTURES_AMOUNT,
+			cb(test, "array of structs"), done
+		)
 
 		assert(sum1 == sum2, BAD_RESULT_MESSAGE)
 	end
@@ -34,19 +39,23 @@ function M.runAll()
 	do
 		local ARRAY_SIZE = 1000
 
-		test "preallocated"
-		local sum1 = testalloc.testPreallocated(USE_SEED, ARRAY_SIZE)
-		done()
+		local sum1 = testalloc.testPreallocated(
+			USE_SEED, ARRAY_SIZE,
+			cb(test, "preallocated"), done
+		)
 
-		test "non preallocated single pass"
-		local sum2 = testalloc.testNonPreallocated(USE_SEED, ARRAY_SIZE, true)
-		done()
+		local sum2 = testalloc.testNonPreallocated(
+			USE_SEED, ARRAY_SIZE, true,
+			cb(test, "non preallocated single pass"), done
+		)
 
-		test "non preallocated double pass"
-		local sum3 = testalloc.testNonPreallocated(USE_SEED, ARRAY_SIZE, false)
-		done()
+		local sum3 = testalloc.testNonPreallocated(
+			USE_SEED, ARRAY_SIZE, false,
+			cb(test, "non preallocated double pass"), done
+		)
 
-		assert(sum1 == sum2 and sum3 == sum1, BAD_RESULT_MESSAGE)
+		assert(sum1 == sum2, BAD_RESULT_MESSAGE)
+		assert(sum1 == sum3, BAD_RESULT_MESSAGE)
 	end
 end
 

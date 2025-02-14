@@ -2,17 +2,31 @@
 local M = {}
 local PLACEHOLDER_VALUE = 0
 
-function M.testPreallocated(seed: number, size: number) : number
+function M.testPreallocated(
+	seed: number,
+	size: number,
+	running: () -> (),
+	finished: () -> ()
+) : number
 	local array = table.create(PLACEHOLDER_VALUE, size)
 
 	local generator = Random.new(seed)
-	for i, _ in array do array[i] = generator:NextNumber() end
+	for i = 1, size do array[i] = generator:NextNumber() end
 
+	running()
 	local sum = 0; for _, item in array do sum += item end
+	finished()
+
 	return sum
 end
 
-function M.testNonPreallocated(seed: number, size: number, singlePass: boolean) : number
+function M.testNonPreallocated(
+	seed: number,
+	size: number,
+	singlePass: boolean,
+	running: () -> (),
+	finished: () -> ()
+) : number
 	local array = {}
 	local generator = Random.new(seed)
 
@@ -23,7 +37,10 @@ function M.testNonPreallocated(seed: number, size: number, singlePass: boolean) 
 		for i = 1, size do array[i] = generator:NextNumber() end
 	end
 
+	running()
 	local sum = 0; for _, item in array do sum += item end
+	finished()
+
 	return sum
 end
 

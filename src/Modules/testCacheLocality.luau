@@ -11,7 +11,9 @@ local function isIdValid(id: number, structuresAmount: number) return id <= stru
 function M.testSOA(
 	seed: number,
 	fieldsAmount: number,
-	structuresAmount: number
+	structuresAmount: number,
+	running: () -> (),
+	finished: () -> ()
 ) : number
 	local arrays: soaContainer = {}
 	for i = 1, fieldsAmount do arrays[i] = table.create(structuresAmount, PLACEHOLDER_VALUE) end
@@ -23,14 +25,19 @@ function M.testSOA(
 		return sum
 	end
 	
+	running()
 	local sum = 0; for id = 1, structuresAmount do sum += sumStruct(id) end
+	finished()
+
 	return sum
 end
 
 function M.testAOS(
 	seed: number,
 	fieldsAmount: number,
-	structuresAmount: number
+	structuresAmount: number,
+	running: () -> (),
+	finished: () -> ()
 ) : number
 	local structs = table.create(fieldsAmount * structuresAmount, PLACEHOLDER_VALUE)
 
@@ -41,7 +48,10 @@ function M.testAOS(
 		return sum
 	end
 
+	running()
 	local sum = 0; for i = 1, structuresAmount, fieldsAmount do sum += sumStruct(i) end
+	finished()
+
 	return sum
 end
 
