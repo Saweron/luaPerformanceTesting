@@ -2,7 +2,7 @@
 local M = {}
 local PLACEHOLDER_VALUE = 0
 
-function M.testPreallocated(size: number, seed: number) : number
+function M.testPreallocated(seed: number, size: number) : number
 	local array = table.create(PLACEHOLDER_VALUE, size)
 
 	local generator = Random.new(seed)
@@ -12,7 +12,7 @@ function M.testPreallocated(size: number, seed: number) : number
 	return sum
 end
 
-function M.testNonPreallocated(size: number, seed: number, singlePass: boolean) : number
+function M.testNonPreallocated(seed: number, size: number, singlePass: boolean) : number
 	local array = {}
 	local generator = Random.new(seed)
 
