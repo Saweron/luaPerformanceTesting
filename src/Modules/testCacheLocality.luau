@@ -1,18 +1,12 @@
 --!strict
 local M = {}
+local common = require "./common"
+
 local PLACEHOLDER_VALUE = 0
 local NONE = 0
 
 type soaContainer = {[number]: {number}}
 type aosContainer = {number}
-
-local function createAccessPattern(size: number, seed: number): {number}
-	local pattern = table.create(size, PLACEHOLDER_VALUE)
-	for i = 1, size do pattern[i] = i end
-	Random.new(seed):Shuffle(pattern)
-	return pattern
-end
-
 
 function M.testSOA(
 	seed: number,
@@ -23,7 +17,7 @@ function M.testSOA(
 ) : number
 	local function isIdValid(id: number) return id <= structuresAmount and id > 0 end
 	local arrays: soaContainer = {}
-	local pattern = createAccessPattern(fieldsAmount, seed)
+	local pattern = common.createAccessPattern(fieldsAmount, seed)
 
 	for i = 1, fieldsAmount do arrays[i] = table.create(structuresAmount, PLACEHOLDER_VALUE) end
 
@@ -57,7 +51,7 @@ function M.testAOS(
 	local function isIdValid(id: number) return id <= lastIndex and id >= 0 end
 
 	local structs = table.create(fieldsAmount * structuresAmount, PLACEHOLDER_VALUE)
-	local pattern = createAccessPattern(fieldsAmount, seed)
+	local pattern = common.createAccessPattern(fieldsAmount, seed)
 
 	local generator = Random.new(seed)
 	for structId = 1, structuresAmount do for fieldIndex = 1, fieldsAmount do
