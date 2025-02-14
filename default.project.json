@@ -1,0 +1,24 @@
+{
+	"name": "Benchmark",
+	"tree": {
+		"$className": "DataModel",
+
+		"ReplicatedStorage": {
+				"Modules": {"$path": "src/Modules"}
+			},
+
+		"StarterPlayer": {
+			"$properties": {
+				"LoadCharacterAppearance": false,
+				"LoadCharacterLayeredClothing": "Disabled",
+				"EnableDynamicHeads": "Disabled",
+				"EnableMouseLockOption": false
+			},
+			"StarterPlayerScripts": {"$path": "src/Client"}
+		},
+
+		"Players": {
+			"$properties": {"CharacterAutoLoads": false}
+		}
+	}
+}
