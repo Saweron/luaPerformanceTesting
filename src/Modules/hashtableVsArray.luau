@@ -1,5 +1,6 @@
 --!strict
 local M = {}
+local PLACEHOLDER_VALUE = 0
 
 export type summable = {sum: (self: summable) -> (number)}
 
@@ -8,7 +9,7 @@ do
 	type arrayImpl = {_fields: {[number]: number}}
 
 	function M.newArrayImpl(seed: number, size: number): summable
-		local fields = table.create(0, size)
+		local fields = table.create(PLACEHOLDER_VALUE, size)
 		local generator = Random.new(seed)
 		for i = 1, size do fields[i] = generator:NextNumber() end
 
@@ -17,8 +18,7 @@ do
 	end
 
 	function ARRAY_PT.sum(self: arrayImpl)
-		local sum = 0
-		for _, value in self._fields do sum += value end
+		local sum = 0; for _, value in self._fields do sum += value end
 		return sum
 	end
 end
@@ -37,8 +37,7 @@ do
 	end
 
 	function HASHTABLE_PT.sum(self: hashtableImpl)
-		local sum = 0
-		for _, value in self._fields do sum += value end
+		local sum = 0; for _, value in self._fields do sum += value end
 		return sum
 	end
 end
